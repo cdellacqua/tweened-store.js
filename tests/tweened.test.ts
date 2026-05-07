@@ -1,6 +1,6 @@
 import {makeTweenedStore, TweenedStore, TweenedStoreSkipError, TweenedStoreState, easings} from '../src/lib/index.js';
 
-describe('ease store', () => {
+describe('tweened store', () => {
 	afterEach(() => {
 		(
 			globalThis as {
@@ -10,7 +10,7 @@ describe('ease store', () => {
 		(globalThis as {cancelAnimationFrame: unknown}).cancelAnimationFrame = undefined;
 	});
 
-	it('creates ease stores and checks their states while at rest', () => {
+	it('creates tweened stores and checks their states while at rest', () => {
 		const number = 13;
 		const array = [43, 21, 5];
 		const object = {x: 543, y: 23, z: 43};
@@ -39,7 +39,7 @@ describe('ease store', () => {
 		expect(tweened$.duration()).to.eq(1500);
 		expect(tweened$.easing()).to.eq(customEasing);
 	});
-	it('changes the ease settings after instantiation', () => {
+	it('changes the tweened settings after instantiation', () => {
 		const tweened$ = makeTweenedStore(0);
 		const customEasing = (t: number) => t * t;
 
@@ -67,7 +67,7 @@ describe('ease store', () => {
 		expect(easeFromArray$.content()).to.eqls(targetArray);
 		expect(easeFromObject$.content()).to.eqls(targetObject);
 	});
-	it('checks the number of active subscriptions to the ease', () => {
+	it('checks the number of active subscriptions to the tweened', () => {
 		const tweened$ = makeTweenedStore(0);
 		expect(tweened$.nOfSubscriptions()).to.eq(0);
 		const unsubscribe = tweened$.subscribe(() => undefined);

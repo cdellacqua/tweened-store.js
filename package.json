@@ -15,6 +15,7 @@
 	"license": "MIT",
 	"keywords": [
 		"ease",
+		"tween",
 		"ui",
 		"store",
 		"animation"

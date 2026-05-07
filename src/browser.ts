@@ -70,13 +70,13 @@ star[0].speed$.subscribe((pixelsPerSecond) => {
 	headSpeedDiv.textContent = `Head speed: ${pixelsPerSecond.toFixed(2).padStart(6, ' ')}px/s`;
 });
 const avgSpeed$ = makeDerivedStore<[number, ...number[]], number>(
-	[star[0].speed$, ...star.slice(1).map((ease) => ease.speed$)],
+	[star[0].speed$, ...star.slice(1).map((tweened) => tweened.speed$)],
 	(speeds: number[]) => speeds.reduce((sum, cur) => sum + cur, 0) / speeds.length,
 );
 avgSpeed$.subscribe((pixelsPerSecond) => {
 	avgSpeedDiv.textContent = `Avg speed: ${pixelsPerSecond.toFixed(2).padStart(6, ' ')}px/s`;
 });
-star[0].state$.subscribe((state) => (stateDiv.textContent = `Head ease state: ${state}`));
+star[0].state$.subscribe((state) => (stateDiv.textContent = `Head tweened state: ${state}`));
 
 if (window.matchMedia('(pointer: fine)').matches) {
 	window.addEventListener('mousedown', (e) => {

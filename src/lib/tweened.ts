@@ -23,7 +23,7 @@ export type RAFImplementation = {
  */
 export class TweenedStoreSkipError extends Error {
 	constructor() {
-		super('[ease store] tween skipped');
+		super('[tweened store] tween skipped');
 	}
 }
 
@@ -56,11 +56,11 @@ export type TweenedStore<T> = ReadonlyStore<T> & {
 	 * function will be used immediately for the remaining trajectory.
 	 */
 	easing(newEasing: Easing): Easing;
-	/** A store containing the current state of the ease. */
+	/** A store containing the current state of the tweened. */
 	state$: ReadonlyStore<TweenedStoreState>;
 	/**
-	 * A store containing the velocity of the ease, in units-per-second,
-	 * expressed using the same shape as the ease value.
+	 * A store containing the velocity of the tweened, in units-per-second,
+	 * expressed using the same shape as the tweened value.
 	 */
 	velocity$: ReadonlyStore<T>;
 	/** The speed (in units-per-second) derived from the velocity using Pythagoras' Theorem. */
@@ -77,12 +77,12 @@ export type TweenedStore<T> = ReadonlyStore<T> & {
 	/** Wait for the tween to end, either because it reached the target or because `.skip()` was called. */
 	idle(): Promise<void>;
 	/**
-	 * A store containing the target value of the ease. Changes to this store will start a new tween (if not already running).
+	 * A store containing the target value of the tweened. Changes to this store will start a new tween (if not already running).
 	 */
 	target$: Store<T>;
 };
 
-/** Configuration options for the ease */
+/** Configuration options for the tweened */
 export type TweenedConfig = {
 	/**
 	 * The easing function used to interpolate from the value at the time
@@ -156,7 +156,7 @@ function makeWaitAnimationFrame(rafImpl?: RAFImplementation) {
 
 /**
  * Create a tweened store.
- * An ease store is a special kind of store that tweens its value toward a
+ * An tweened store is a special kind of store that tweens its value toward a
  * target using a configurable easing function. It can be used to perform
  * animations and to make a UI feel more natural (e.g. in a drag&drop scenario).
  *
@@ -284,7 +284,7 @@ export function makeTweenedStore<T extends number | number[] | Record<string, nu
 		}
 		startValue = valueOps.clone(currentValue);
 		elapsed = 0;
-		follow().catch((err) => console.error('[ease store] unable to follow target', err));
+		follow().catch((err) => console.error('[tweened store] unable to follow target', err));
 	});
 	state$.subscribe((state) => {
 		if (state === 'idle') {

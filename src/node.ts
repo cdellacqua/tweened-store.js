@@ -7,11 +7,11 @@ const tweened$ = makeTweenedStore(1, {
 });
 
 const all$ = makeDerivedStore([tweened$, tweened$.speed$, tweened$.state$, tweened$.target$], (x) => x);
-all$.subscribe(([ease, speed, state, target]) => {
+all$.subscribe(([tweened, speed, state, target]) => {
 	process.stdout.write(
 		'\u001b[2K\r' +
 			JSON.stringify({
-				ease: ease.toFixed(2),
+				tweened: tweened.toFixed(2),
 				target: target.toFixed(2),
 				speed: speed.toFixed(2),
 				state,
