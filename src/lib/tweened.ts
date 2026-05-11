@@ -65,8 +65,19 @@ export type TweenedStore<T> = ReadonlyStore<T> & {
 	velocity$: ReadonlyStore<T>;
 	/** The speed (in units-per-second) derived from the velocity using Pythagoras' Theorem. */
 	speed$: ReadonlyStore<number>;
-	/** Stop the tween, even if it was paused, and set the store value to the current target. */
-	skip(): Promise<void>;
+	/**
+	 * Stop the tween, even if it was paused, and set the store value to the current target.
+	 *
+	 * If a `target` argument is provided, it's assigned to `target$` before the skip happens.
+	 * Calling `tweened.skip(somewhere)` is roughly equivalent to:
+	 * ```ts
+	 * tweened.target$.set(somewhere);
+	 * tweened.skip();
+	 * ```
+	 * but, when the tween is currently idle, the snap is performed synchronously without
+	 * waiting for an animation frame, so subscribers never observe a transient running frame.
+	 */
+	skip(target?: T): Promise<void>;
 	/**
 	 * Pause the tween.
 	 * @throws {TweenedStoreSkipError} if `.skip()` is called while the tween is pausing or paused.
@@ -276,10 +287,14 @@ export function makeTweenedStore<T extends number | number[] | Record<string, nu
 	const current$ = makeStore(value);
 	const target$ = makeStore(value);
 	let firstTarget = true;
+	let suppressFollow = false;
 	target$.subscribe((target) => {
 		targetValue = valueOps.clone(target as WidenedT);
 		if (firstTarget) {
 			firstTarget = false;
+			return;
+		}
+		if (suppressFollow) {
 			return;
 		}
 		startValue = valueOps.clone(currentValue);
@@ -298,9 +313,12 @@ export function makeTweenedStore<T extends number | number[] | Record<string, nu
 
 	function skipToTarget() {
 		currentValue = valueOps.clone(targetValue);
+		startValue = valueOps.clone(currentValue);
 		velocity = valueOps.zero();
 		elapsed = duration;
 	}
+
+	let suppressLoopEmits = false;
 
 	async function follow() {
 		if (state$.content() !== 'idle') {
@@ -364,10 +382,13 @@ export function makeTweenedStore<T extends number | number[] | Record<string, nu
 						break;
 				}
 
-				current$.set(currentValue);
-				velocity$.set(velocity);
+				if (!suppressLoopEmits) {
+					current$.set(currentValue);
+					velocity$.set(velocity);
+				}
 			}
 		} finally {
+			suppressLoopEmits = false;
 			state$.set('idle');
 		}
 	}
@@ -431,8 +452,25 @@ export function makeTweenedStore<T extends number | number[] | Record<string, nu
 		resume() {
 			resolveResumePromise();
 		},
-		async skip() {
+		async skip(target?: WidenedT) {
+			const hasTarget = arguments.length > 0;
 			const state = state$.content();
+
+			if (hasTarget) {
+				suppressFollow = true;
+				try {
+					target$.set(target as WidenedT);
+				} finally {
+					suppressFollow = false;
+				}
+				skipToTarget();
+				current$.set(currentValue);
+				velocity$.set(velocity);
+				if (state !== 'idle') {
+					suppressLoopEmits = true;
+				}
+			}
+
 			if ((state === 'running' || state === 'pausing' || state === 'paused') && idlePromise) {
 				state$.set('skipping');
 				const skipError = new TweenedStoreSkipError();

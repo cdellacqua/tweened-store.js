@@ -263,6 +263,32 @@ describe('tweened store', () => {
 		expect(Math.abs(allValues.at(-1)! - allValues.at(-2)!)).to.be.greaterThan(0);
 		expect(states).to.eqls(['idle', 'running', 'skipping', 'idle']);
 	});
+	it('skips to a new target synchronously while idle', async () => {
+		const tweened$ = makeTweenedStore(0, {duration: 1000});
+		const states: TweenedStoreState[] = [];
+		const allValues: number[] = [];
+		tweened$.subscribe((current) => allValues.push(current));
+		tweened$.state$.subscribe((state) => states.push(state));
+		await tweened$.skip(2);
+		expect(tweened$.content()).to.eqls(2);
+		expect(tweened$.target$.content()).to.eqls(2);
+		expect(tweened$.velocity$.content()).to.eqls(0);
+		expect(allValues).to.eqls([0, 2]);
+		expect(states).to.eqls(['idle']);
+	});
+	it('skips to a new target while running', async () => {
+		const tweened$ = makeTweenedStore(0, {duration: 1000});
+		const states: TweenedStoreState[] = [];
+		const allValues: number[] = [];
+		tweened$.subscribe((current) => allValues.push(current));
+		tweened$.state$.subscribe((state) => states.push(state));
+		tweened$.target$.set(1);
+		await tweened$.skip(2);
+		expect(tweened$.content()).to.eqls(2);
+		expect(tweened$.target$.content()).to.eqls(2);
+		expect(allValues.at(-1)).to.eqls(2);
+		expect(states).to.eqls(['idle', 'running', 'skipping', 'idle']);
+	});
 	it('calls skip() and pause() almost at the same time', async () => {
 		const tweened$ = makeTweenedStore(0);
 		const states: TweenedStoreState[] = [];
