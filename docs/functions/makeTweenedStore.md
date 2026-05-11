@@ -8,7 +8,7 @@
 
 > **makeTweenedStore**\<`T`\>(`value`, `config?`): [`TweenedStore`](../type-aliases/TweenedStore.md)\<`T` *extends* `number` ? `number` : `T`\>
 
-Defined in: [src/lib/tweened.ts:176](https://github.com/cdellacqua/tweened-store.js/blob/main/src/lib/tweened.ts#L176)
+Defined in: [src/lib/tweened.ts:187](https://github.com/cdellacqua/tweened-store.js/blob/main/src/lib/tweened.ts#L187)
 
 Create a tweened store.
 An tweened store is a special kind of store that tweens its value toward a

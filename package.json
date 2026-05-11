@@ -2,7 +2,7 @@
 	"name": "@universal-stores/tweened",
 	"camelCaseName": "universalStoresTweened",
 	"description": "A tweened store is a special kind of store that interpolate its value toward a target using a configurable easing function. It can be used to perform animations.",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"type": "module",
 	"types": "./dist/index.d.ts",
 	"main": "./dist/index.cjs",

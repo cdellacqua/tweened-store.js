@@ -8,7 +8,7 @@
 
 > **TweenedConfig** = `object`
 
-Defined in: [src/lib/tweened.ts:86](https://github.com/cdellacqua/tweened-store.js/blob/main/src/lib/tweened.ts#L86)
+Defined in: [src/lib/tweened.ts:97](https://github.com/cdellacqua/tweened-store.js/blob/main/src/lib/tweened.ts#L97)
 
 Configuration options for the tweened
 
@@ -18,7 +18,7 @@ Configuration options for the tweened
 
 > **duration**: `number`
 
-Defined in: [src/lib/tweened.ts:99](https://github.com/cdellacqua/tweened-store.js/blob/main/src/lib/tweened.ts#L99)
+Defined in: [src/lib/tweened.ts:110](https://github.com/cdellacqua/tweened-store.js/blob/main/src/lib/tweened.ts#L110)
 
 The duration of the tween, in milliseconds.
 
@@ -34,7 +34,7 @@ The duration of the tween, in milliseconds.
 
 > **easing**: [`Easing`](Easing.md)
 
-Defined in: [src/lib/tweened.ts:93](https://github.com/cdellacqua/tweened-store.js/blob/main/src/lib/tweened.ts#L93)
+Defined in: [src/lib/tweened.ts:104](https://github.com/cdellacqua/tweened-store.js/blob/main/src/lib/tweened.ts#L104)
 
 The easing function used to interpolate from the value at the time
 `target$` was set to the current target.

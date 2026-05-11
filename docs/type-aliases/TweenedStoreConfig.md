@@ -8,7 +8,7 @@
 
 > **TweenedStoreConfig** = `object` & `Partial`\<[`TweenedConfig`](TweenedConfig.md)\>
 
-Defined in: [src/lib/tweened.ts:103](https://github.com/cdellacqua/tweened-store.js/blob/main/src/lib/tweened.ts#L103)
+Defined in: [src/lib/tweened.ts:114](https://github.com/cdellacqua/tweened-store.js/blob/main/src/lib/tweened.ts#L114)
 
 Configuration options for a tweened store
 
